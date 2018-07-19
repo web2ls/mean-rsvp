@@ -4,6 +4,17 @@
     <h1 class="header-page-siteTitle">
       <a routerLink="/">RSVP</a>
     </h1>
+    <div class="header-page-authStatus">
+      <span *ngIf="authService.loggingIn">Logging in...</span>
+      <ng-template [ngIf]="!authService.loggingIn">
+        <a *ngIf="!authService.loggedIn" (click)="authService.login()">Log In</a>
+        <span *ngIf="authService.loggedIn && authService.userProfile">
+          {{ authService.userProfile.name }}
+          <span class="divider">|</span>
+          <a (click)="authService.logout()">Log Out</a>
+        </span>
+      </ng-template>
+    </div>
   </div>
 
   <nav id="nav" class="nav" role="navigation">
