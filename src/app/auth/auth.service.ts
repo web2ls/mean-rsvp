@@ -23,6 +23,7 @@ export class AuthService {
   loggedIn: boolean;
   loggedIn$ = new BehaviorSubject<boolean>(this.loggedIn);
   loggingIn: boolean;
+  isAdmin: boolean;
 
   constructor(private router: Router) {
     // If app auth token is not expired, request new token
@@ -44,7 +45,7 @@ export class AuthService {
 
   handleAuth() {
     // When Auth0 hash parsed, get profile
-    this._auth0.parseHash(window.location.href, (err, authResult) => {
+    this._auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken) {
         window.location.hash = '';
         this._getProfile(authResult);
@@ -73,6 +74,7 @@ export class AuthService {
     localStorage.setItem('expires_at', JSON.stringify(this.expiresAt));
     this.accessToken = authResult.accessToken;
     this.userProfile = profile;
+    this.isAdmin = this._checkAdmin(profile);
     // Update login status in loggedIn$ stream
     this.setLoggedIn(true);
     this.loggingIn = false;
@@ -107,6 +109,12 @@ export class AuthService {
         this._clearExpiration();
       }
     });
+  }
+
+  private _checkAdmin(profile) {
+    // Check if the user has admin role
+    const roles = profile[AUTH_CONFIG.NAMESPACE] || [];
+    return roles.indexOf('admin') > -1;
   }
 
 }
