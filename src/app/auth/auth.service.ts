@@ -62,7 +62,10 @@ export class AuthService {
     this._auth0.client.userInfo(authResult.accessToken, (err, profile) => {
       if (profile) {
         this._setSession(authResult, profile);
+        this._redirect();
       } else if (err) {
+        this._clearRedirect();
+        this.router.navigate(['/']);
         console.warn(`Error retrieving profile: ${err.error}`);
       }
     });
@@ -88,6 +91,7 @@ export class AuthService {
   logout() {
     // Remove data from localStorage
     this._clearExpiration();
+    this._clearRedirect();
     // End Auth0 authentication session
     this._auth0.logout({
       clientId: AUTH_CONFIG.CLIENT_ID,
@@ -115,6 +119,20 @@ export class AuthService {
     // Check if the user has admin role
     const roles = profile[AUTH_CONFIG.NAMESPACE] || [];
     return roles.indexOf('admin') > -1;
+  }
+
+  private _redirect() {
+    const redirect = decodeURI(localStorage.getItem('authRedirect'));
+    const navArr = [redirect || '/'];
+
+    this.router.navigate(navArr);
+    // Redirection completed; clear redirect from storage
+    this._clearRedirect();
+  }
+
+  private _clearRedirect() {
+    // Remove redirect from localStorage
+    localStorage.removeItem('authRedirect');
   }
 
 }
