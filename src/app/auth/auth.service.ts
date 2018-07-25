@@ -123,6 +123,10 @@ export class AuthService {
 
   private _redirect() {
     const fullRedirect = decodeURI(localStorage.getItem('authRedirect'));
+    if (!fullRedirect || fullRedirect === 'null') {
+      this.router.navigate(['/']);
+      return;
+    }
     const redirectArr = fullRedirect.split('?tab=');
     const navArr = [redirectArr[0] || '/'];
     const tabObj = redirectArr[1] ? { queryParams: { tab: redirectArr[1] }} : null;
