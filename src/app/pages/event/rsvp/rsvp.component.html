@@ -29,6 +29,19 @@
         <li *ngIf="userRsvp.comments" class="list-group-item">
           <strong>Comments:</strong><span [innerHTML]="userRsvp.comments"></span>
         </li>
+
+        <div class="card-body">
+          <button
+            class="btn btn-info"
+            [ngClass]="{ 'btn-info': !showEditForm, 'btn-warning': showEditForm }"
+            (click)="toggleEditForm()">{{ editBtnText }}</button>
+  
+          <app-rsvp-form
+            *ngIf="showEditForm"
+            [eventId]="eventId"
+            [rsvp]="userRsvp"
+            (submitRsvp)="onSubmitRsvp($event)"></app-rsvp-form>
+        </div>
       </ul>
       <!-- @TODO: Toggle RSVP form (update existing) will go here -->
     </ng-template>
@@ -36,7 +49,9 @@
     <!-- No RSVP yet -->
     <div *ngIf="!userRsvp" class="card-body">
       <p class="lead">Fill out the form below to respond:</p>
-      <!-- @TODO: RSVP form (add new RSVP) will go here -->
+      <app-rsvp-form
+      [eventId]="eventId"
+      (submitRsvp)="onSubmitRsvp($event)"></app-rsvp-form>
     </div>
   </ng-template>
 
