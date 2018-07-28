@@ -44,6 +44,18 @@
         </div>
       </ul>
       <!-- @TODO: Toggle RSVP form (update existing) will go here -->
+      <div class="card-body">
+        <!-- <button
+          class="btn btn-info"
+          [ngClass]="{ 'btn-info': !showEditForm, 'btn-warning': showEditForm }"
+          (click)="toggleEditForm()">{{ editBtnText }}</button> -->
+
+        <!-- <app-rsvp-form
+          *ngIf="showEditForm"
+          [eventId]="eventId"
+          [rsvp]="userRsvp"
+          (submitRsvp)="onSubmitRsvp($event)"></app-rsvp-form> -->
+      </div>
     </ng-template>
 
     <!-- No RSVP yet -->
