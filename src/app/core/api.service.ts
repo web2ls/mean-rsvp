@@ -91,4 +91,36 @@ export class ApiService {
       );
   }
 
+  postEvent$(event: EventModel): Observable<EventModel> {
+    return this.http
+      .post<EventModel>(`${ENV.BASE_API}event/new`, event, {
+        headers: new HttpHeaders().set('Authorization', this._authHeader)
+      })
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
+  }
+
+  // PUT existing event (admin only)
+  editEvent$(id: string, event: EventModel): Observable<EventModel> {
+    return this.http
+      .put<EventModel>(`${ENV.BASE_API}event/${id}`, event, {
+        headers: new HttpHeaders().set('Authorization', this._authHeader)
+      })
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
+  }
+
+  // DELETE existing event and all associated RSVPs (admin only)
+  deleteEvent$(id: string): Observable<any> {
+    return this.http
+      .delete(`${ENV.BASE_API}event/${id}`, {
+        headers: new HttpHeaders().set('Authorization', this._authHeader)
+      })
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
+  }
+
 }

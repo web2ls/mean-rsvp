@@ -32,6 +32,12 @@
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }">Admin</a>
       </li>
+      <li>
+        <a
+          *ngIf="authService.loggedIn && authService.isAdmin"
+          routerLink="/admin/event/new"
+          routerLinkActive="active">Create Event</a>
+      </li>
     </ul>
   </nav>
 </header>
