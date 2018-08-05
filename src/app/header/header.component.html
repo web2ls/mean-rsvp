@@ -9,7 +9,7 @@
       <ng-template [ngIf]="!authService.loggingIn">
         <a *ngIf="!authService.loggedIn" (click)="authService.login()">Log In</a>
         <span *ngIf="authService.loggedIn && authService.userProfile">
-          {{ authService.userProfile.name }}
+          <a routerLink="/my-rsvps">{{ authService.userProfile.name }}</a>
           <span class="divider">|</span>
           <a (click)="authService.logout()">Log Out</a>
         </span>
@@ -37,6 +37,12 @@
           *ngIf="authService.loggedIn && authService.isAdmin"
           routerLink="/admin/event/new"
           routerLinkActive="active">Create Event</a>
+      </li>
+      <li>
+        <a
+          *ngIf="authService.loggedIn"
+          routerLink="/my-rsvps"
+          routerLinkActive="active">My RSVPs</a>
       </li>
     </ul>
   </nav>

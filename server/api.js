@@ -214,5 +214,56 @@ module.exports = function(app, config) {
         });
       });
     });
+
+    app.delete('/api/event/:id', jwtCheck, adminCheck, (req, res) => {
+      Event.findById(req.params.id, (err, event) => {
+        if (err) {
+          return res.status(500).send({message: err.message});
+        }
+        if (!event) {
+          return res.status(400).send({message: 'Event not found.'});
+        }
+        Rsvp.find({eventId: req.params.id}, (err, rsvps) => {
+          if (rsvps) {
+            rsvps.forEach(rsvp => {
+              rsvp.remove();
+            });
+          }
+          event.remove(err => {
+            if (err) {
+              return res.status(500).send({message: err.message});
+            }
+            res.status(200).send({message: 'Event and RSVPs successfully deleted.'});
+          });
+        });
+      });
+    });
+
+    app.get('/api/events/:userId', jwtCheck, (req, res) => {
+      Rsvp.find({userId: req.params.userId}, 'eventId', (err, rsvps) => {
+        const _eventIdsArr = rsvps.map(rsvp => rsvp.eventId);
+        const _rsvpEventsProjection = 'title startDatetime endDatetime';
+        let eventsArr = [];
+  
+        if (err) {
+          return res.status(500).send({message: err.message});
+        }
+        if (rsvps) {
+          Event.find(
+            {_id: {$in: _eventIdsArr}, startDatetime: { $gte: new Date() }},
+            _rsvpEventsProjection, (err, events) => {
+            if (err) {
+              return res.status(500).send({message: err.message});
+            }
+            if (events) {
+              events.forEach(event => {
+                eventsArr.push(event);
+              });
+            }
+            res.send(eventsArr);
+          });
+        }
+      });
+    });
    
    };

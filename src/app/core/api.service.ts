@@ -123,4 +123,14 @@ export class ApiService {
       );
   }
 
+  getUserEvents$(userId: string): Observable<EventModel[]> {
+    return this.http
+      .get<EventModel[]>(`${ENV.BASE_API}events/${userId}`, {
+        headers: new HttpHeaders().set('Authorization', this._authHeader)
+      })
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
+  }
+
 }
