@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subscription, timer } from 'rxjs';
-import "rxjs/add/observable/of";
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { timer } from 'rxjs/observable/timer';
+import { of } from "rxjs/observable/of";
 import { mergeMap } from 'rxjs/operators';
 import { AUTH_CONFIG } from './auth.config';
 import * as auth0 from 'auth0-js';
